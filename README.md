@@ -33,19 +33,16 @@ A ferramenta foi pensada para triagem estratégica. Ela não substitui auditoria
 
 ## Pré-requisitos
 
-- Python 3.x.
-- Projeto no Google Cloud com APIs necessárias habilitadas.
+- Python 3.10 ou superior.
+- Projeto no Google Cloud com as APIs necessárias habilitadas.
 - Chave de API do Google Cloud.
 - Programmable Search Engine CX, caso as análises de indexação e busca de marca sejam usadas.
-- Bibliotecas Python:
-  - `requests`
-  - `python-dotenv`
-  - `openpyxl`
+- Dependências listadas em `requirements.txt`.
 
 Instale as dependências com:
 
 ```sh
-pip install requests python-dotenv openpyxl
+python -m pip install -r requirements.txt
 ```
 
 ## APIs utilizadas
@@ -57,11 +54,19 @@ Conforme os recursos habilitados, o script pode usar:
 - Custom Search API.
 - Knowledge Graph Search API.
 
-O uso das APIs pode consumir cotas e gerar custos no projeto Google Cloud. Revise limites, faturamento e permissões antes de coletas amplas.
+O uso dessas APIs pode consumir cotas e gerar custos no projeto Google Cloud. Revise limites, faturamento, restrições de chave e permissões antes de coletas amplas.
 
-## Configuração do `.env`
+## Configuração do ambiente
 
-Na raiz do projeto, crie um arquivo `.env` com as credenciais e chaves de ativação:
+Copie o arquivo de exemplo:
+
+```sh
+cp .env.example .env
+```
+
+No Windows, você pode simplesmente duplicar `.env.example` e renomear a cópia para `.env`.
+
+Preencha apenas o `.env` local:
 
 ```env
 GOOGLE_CLOUD_API_KEY=sua_chave_google_cloud
@@ -74,7 +79,7 @@ USE_KNOWLEDGE_GRAPH_API=true
 
 As variáveis `USE_*` aceitam valores como `true`, `false`, `1`, `0`, `sim` e `não`.
 
-Não publique o arquivo `.env` e não exponha a chave de API em repositórios públicos.
+O `.gitignore` exclui `.env`, planilhas geradas e caches locais. Nunca publique uma chave real de API, mesmo que o arquivo seja removido posteriormente do commit mais recente.
 
 ## Configuração do script
 
@@ -125,6 +130,8 @@ Durante a execução, o script registra o andamento da coleta, das análises com
 - `cse_brand_cache.json`: cache de consultas de busca de marca.
 - `kg_cache.json`: cache de consultas ao Knowledge Graph.
 
+Esses arquivos são ignorados pelo Git porque podem conter dados coletados, resultados de APIs ou informações de prospecção que não devem ser publicados por acidente.
+
 ## Principais colunas da planilha
 
 A planilha inclui, entre outros campos:
@@ -141,6 +148,29 @@ A planilha inclui, entre outros campos:
 - Entidade no Knowledge Graph.
 - Scores local, técnico, visibilidade de marca e prioridade do lead.
 
+## Testes e CI
+
+O repositório inclui testes unitários para funções utilitárias e um workflow de GitHub Actions que executa compilação e testes em Python 3.10, 3.11, 3.12 e 3.13.
+
+Para validar localmente:
+
+```sh
+python -m py_compile google-business-profiles-cloud-seo-scraper.py
+python -m unittest discover -s tests -v
+```
+
+Os testes não exigem credenciais reais nem fazem chamadas às APIs do Google.
+
+## Segurança, privacidade e uso responsável
+
+Use a ferramenta apenas de forma compatível com os termos das APIs e serviços utilizados e com as regras aplicáveis ao tratamento, armazenamento e uso dos dados coletados.
+
+Não inclua chaves de API, credenciais, dados pessoais, listas de leads, planilhas exportadas ou caches de respostas em issues, pull requests ou commits públicos.
+
+Os dados públicos retornados por APIs ou encontrados em sites podem continuar sujeitos a termos de serviço, direitos de terceiros, regras de privacidade e outras obrigações. A existência pública de um dado não implica autorização irrestrita para qualquer finalidade.
+
+Para reportar vulnerabilidades, consulte `SECURITY.md`.
+
 ## Observações
 
 - O script coleta apenas empresas com site próprio e telefone identificados no perfil.
@@ -149,3 +179,16 @@ A planilha inclui, entre outros campos:
 - A estimativa de páginas indexadas depende do Google Programmable Search Engine e não deve ser tratada como contagem oficial de indexação.
 - A posição de busca de marca é aproximada e limitada aos resultados retornados pela Custom Search API.
 - Os scores servem para priorização interna e devem ser revisados antes de qualquer abordagem comercial.
+- Este projeto não é afiliado, patrocinado ou endossado pelo Google. Google, Google Cloud, Google Maps e demais marcas citadas pertencem aos seus respectivos titulares.
+
+## Contribuindo
+
+Contribuições são bem-vindas. Consulte `CONTRIBUTING.md` antes de abrir um pull request.
+
+## Licença
+
+Este projeto é distribuído sob a MIT License.
+
+Copyright (c) 2025-2026 Rede Piabanha.
+
+Consulte `LICENSE` para o texto completo.
