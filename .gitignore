@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment variables and credentials
+.env
+.env.*
+!.env.example
+
+# Generated spreadsheets and caches
+google-business-profiles.xlsx
+*.xlsx
+known_places.json
+pagespeed_cache.json
+cse_site_cache.json
+cse_brand_cache.json
+kg_cache.json
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# IDEs and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
